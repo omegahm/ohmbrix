@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Ohm Brix | Ønsker</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script> -->
+  <!-- <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script> -->
+  <!-- <script crossorigin src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.production.min.js"></script> -->
+
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js"></script>
+
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script type="text/babel">
+    const {
+      createMuiTheme,
+      makeStyles,
+      AppBar,
+      Avatar,
+      Box,
+      Divider,
+      Icon,
+      LinearProgress,
+      List,
+      ListItem,
+      ListItemAvatar,
+      ListItemText,
+      ListSubheader,
+      Paper,
+      Toolbar,
+      Typography
+    } = MaterialUI
+
+    const theme = createMuiTheme({
+      typography: {
+        fontFamily: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+        ].join(','),
+      }
+    })
+
+    const useStyle = makeStyles(theme => ({
+      root: {
+        padding: theme.spacing(3, 2),
+        marginBottom: 20
+      },
+      bigAvatar: {
+        margin: '10px 20px 10px 5px',
+        width: 60,
+        height: 60
+      },
+      title: {
+        flexGrow: 1
+      }
+    }))
+
+    function ListItemLink(props) {
+      return <ListItem button component="a" {...props} />
+    }
+
+    function Person(props){
+      const classes = useStyle()
+      const { name, categories } = props
+
+      return <Paper className={classes.root}>
+        <Typography variant="h3" component="h3" color="secondary">
+          {name}
+        </Typography>
+        {categories.map((category, idx) => <Category key={`category-${idx}`} {...category} />)}
+      </Paper>
+    }
+
+    function Category(props) {
+      const { title, icon, wishes } = props
+
+      const subheader = <ListSubheader disableSticky disableGutters>
+        <Typography variant="h6" component="h6">
+          {title}
+        </Typography>
+      </ListSubheader>
+
+      return <List subheader={subheader}>
+        {wishes.map((wish, idx) => (
+          <Box key={`wish-${idx}`}>
+            <Wish {...wish} />
+            {(idx !== wishes.length - 1 ? <Divider light component="li" /> : null)}
+          </Box>
+        ))}
+      </List>
+    }
+
+    function Wish(props) {
+      const classes = useStyle()
+
+      const { title, url, image } = props
+
+      return <ListItemLink href={url}>
+        <ListItemAvatar>
+          {image ?
+            <Avatar className={classes.bigAvatar} alt={title} src={image} /> :
+            <Avatar className={classes.bigAvatar}><Icon>face</Icon></Avatar>
+          }
+        </ListItemAvatar>
+        <ListItemText primary={title} />
+      </ListItemLink>
+    }
+
+    class WishList extends React.Component {
+      google_sheets_url = "https://spreadsheets.google.com/feeds/list/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/od6/public/values?alt=json"
+
+      state = {
+        data: []
+      }
+
+      componentDidMount() {
+        fetch(this.google_sheets_url)
+          .then(response => response.json())
+          .then(data => {
+            let result = []
+            let lastPerson = {}
+            let lastCategory = {}
+
+            data.feed.entry.forEach(row => {
+              let name = row.gsx$name.$t
+              if (name.match(/^##/)) {
+                let person = { name: name.replace(/^## /, ''), categories: [] }
+                lastPerson = person
+                result.push(person)
+              } else if (name.match(/^--/)) {
+                let category = {
+                  title: name.replace(/^-- /, ''),
+                  wishes: []
+                }
+                lastCategory = category
+                lastPerson.categories.push(category)
+              } else {
+                let wish = {
+                  title: name,
+                  url: row.gsx$link.$t,
+                  image: row.gsx$image.$t
+                }
+                lastCategory.wishes.push(wish)
+              }
+            })
+            this.setState({ data: result })
+          })
+      }
+
+      render() {
+        if (this.state.data.length === 0) {
+          return <LinearProgress color="secondary" />
+        }
+
+        return <Box>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography variant="h6" style={{flexGrow: 1}}>
+                Ønsker
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          {this.state.data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)}
+        </Box>
+      }
+    }
+
+    ReactDOM.render(
+      <WishList />,
+      document.getElementById("root")
+    )
+  </script>
+</body>
+</html>
