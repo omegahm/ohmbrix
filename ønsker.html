@@ -109,15 +109,23 @@
 
       const { title, url, image } = props
 
-      return <ListItemLink href={url}>
-        <ListItemAvatar>
-          {image ?
-            <Avatar className={classes.bigAvatar} alt={title} src={image} /> :
-            <Avatar className={classes.bigAvatar}><Icon>face</Icon></Avatar>
-          }
-        </ListItemAvatar>
-        <ListItemText primary={title} />
-      </ListItemLink>
+      let listItem = (
+        <React.Fragment>
+          <ListItemAvatar>
+            {image ?
+              <Avatar className={classes.bigAvatar} alt={title} src={image} /> :
+              <Avatar className={classes.bigAvatar}><Icon>face</Icon></Avatar>
+            }
+          </ListItemAvatar>
+          <ListItemText primary={title} />
+        </React.Fragment>
+      )
+
+      if (url) {
+        return <ListItemLink href={url}>{listItem}</ListItemLink>
+      } else {
+        return <ListItem>{listItem}</ListItem>
+      }
     }
 
     class WishList extends React.Component {
