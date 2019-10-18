@@ -26,6 +26,7 @@
       AppBar,
       Avatar,
       Box,
+      Container,
       Divider,
       Icon,
       LinearProgress,
@@ -78,7 +79,7 @@
       const { name, categories } = props
 
       return <Paper className={classes.root}>
-        <Typography variant="h3" component="h3" color="secondary">
+        <Typography variant="h5" component="h5" color="secondary">
           {name}
         </Typography>
         {categories.map((category, idx) => <Category key={`category-${idx}`} {...category} />)}
@@ -170,20 +171,24 @@
       }
 
       render() {
+        let content
+
         if (this.state.data.length === 0) {
-          return <LinearProgress color="secondary" />
+          content = <LinearProgress color="secondary" />
+        } else {
+          content = this.state.data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)
         }
 
-        return <Box>
+        return <Container maxWidth="lg">
           <AppBar position="static">
             <Toolbar>
-              <Typography variant="h6" style={{flexGrow: 1}}>
+              <Typography variant="h4" style={{flexGrow: 1}}>
                 Ønsker
               </Typography>
             </Toolbar>
           </AppBar>
-          {this.state.data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)}
-        </Box>
+          {content}
+        </Container>
       }
     }
 
