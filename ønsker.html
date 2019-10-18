@@ -8,6 +8,7 @@
   <style>
     html, body {
       height: 100%;
+      background-color: lightsteelblue;
     }
   </style>
 </head>
@@ -129,15 +130,17 @@
       }
     }
 
-    class WishList extends React.Component {
-      google_sheets_url = "https://spreadsheets.google.com/feeds/list/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/od6/public/values?alt=json"
+    function WishList() {
+      const google_sheets_url = "https://spreadsheets.google.com/feeds/list/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/od6/public/values?alt=json"
 
-      state = {
-        data: []
-      }
+      const classes = useStyle()
 
-      componentDidMount() {
-        fetch(this.google_sheets_url)
+      const [data, setData] = React.useState([])
+      const [loading, setLoading] = React.useState(true)
+      React.useEffect(loadData, [])
+
+      function loadData() {
+        fetch(google_sheets_url)
           .then(response => response.json())
           .then(data => {
             let result = []
@@ -166,30 +169,46 @@
                 lastCategory.wishes.push(wish)
               }
             })
-            this.setState({ data: result })
+            setData(result)
+            setLoading(false)
           })
       }
 
-      render() {
-        let content
+      let loadingContent = <Paper className={classes.root}>
+        <Typography variant="h5" component="h5" color="secondary">
+          Indlæser...
+        </Typography>
+        <List subheader={
+          <ListSubheader disableGutters disableSticky>
+            <Typography variant="h6" component="h6">
+              {'...'}
+            </Typography>
+          </ListSubheader>
+        }>
+          <Box>
+            <ListItem>
+              <ListItemAvatar>
+              <Avatar className={classes.bigAvatar}><Icon>face</Icon></Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={'...'} />
+            </ListItem>
+          </Box>
+        </List>
+      </Paper>
 
-        if (this.state.data.length === 0) {
-          content = <LinearProgress color="secondary" />
-        } else {
-          content = this.state.data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)
-        }
+      let content = data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)
 
-        return <Container maxWidth="lg">
-          <AppBar position="static">
-            <Toolbar>
-              <Typography variant="h4" style={{flexGrow: 1}}>
-                Ønsker
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          {content}
-        </Container>
-      }
+      return <Container maxWidth="lg">
+        <AppBar style={{marginBottom: 10 + (loading ? 0 : 4), borderRadius: 4}} position="static">
+          <Toolbar>
+            <Typography variant="h4" style={{flexGrow: 1}}>
+              Ønsker
+            </Typography>
+          </Toolbar>
+          {loading ? <LinearProgress color="secondary" /> : null}
+        </AppBar>
+        {loading ? loadingContent : content}
+      </Container>
     }
 
     ReactDOM.render(
