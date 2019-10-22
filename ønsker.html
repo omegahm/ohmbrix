@@ -21,6 +21,31 @@
 
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   <script type="text/babel">
+    function useHover() {
+      const [hover, setHover] = React.useState(false)
+      const ref = React.useRef(null)
+      const handleMouseOver = () => setHover(true)
+      const handleMouseOut = () => setHover(false)
+
+      React.useEffect(
+        () => {
+          const node = ref.current
+          if (node) {
+            node.addEventListener('mouseover', handleMouseOver)
+            node.addEventListener('mouseout', handleMouseOut)
+
+            return () => {
+              node.removeEventListener('mouseover', handleMouseOver)
+              node.removeEventListener('mouseout', handleMouseOut)
+            }
+          }
+        },
+        [ref.current]
+      )
+
+      return [ref, hover]
+    }
+
     const {
       createMuiTheme,
       makeStyles,
@@ -68,6 +93,15 @@
       },
       title: {
         flexGrow: 1
+      },
+      linkIcon: {
+        fontSize: '1.2rem',
+        lineHeight: 1.5,
+        paddingLeft: 5,
+        color: 'darkgray'
+      },
+      hoveredIcon: {
+        color: 'blue'
       }
     }))
 
@@ -88,7 +122,7 @@
     }
 
     function Category(props) {
-      const { title, icon, wishes } = props
+      const { title, wishes } = props
 
       const subheader = <ListSubheader disableSticky disableGutters>
         <Typography variant="h6" component="h6">
@@ -109,9 +143,11 @@
     function Wish(props) {
       const classes = useStyle()
 
+      const [hoverRef, isHovered] = useHover()
+
       const { title, url, image } = props
 
-      let listItem = (
+      let listItem = listItemText => (
         <React.Fragment>
           <ListItemAvatar>
             {image ?
@@ -119,14 +155,22 @@
               <Avatar className={classes.bigAvatar}><Icon>face</Icon></Avatar>
             }
           </ListItemAvatar>
-          <ListItemText primary={title} />
+          {listItemText}
         </React.Fragment>
       )
 
       if (url) {
-        return <ListItemLink href={url}>{listItem}</ListItemLink>
+        let text = (
+          <React.Fragment>
+            {title}
+            <Icon className={[classes.linkIcon, isHovered ? classes.hoveredIcon : ''].join(' ')}>link</Icon>
+          </React.Fragment>
+        )
+        let listItemText = <ListItemText ref={hoverRef} primary={text} />
+        return <ListItemLink href={url}>{listItem(listItemText)}</ListItemLink>
       } else {
-        return <ListItem>{listItem}</ListItem>
+        let listItemText = <ListItemText primary={title} />
+        return <ListItem>{listItem(listItemText)}</ListItem>
       }
     }
 
