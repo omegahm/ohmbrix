@@ -89,7 +89,12 @@
       bigAvatar: {
         margin: '10px 20px 10px 5px',
         width: 60,
-        height: 60
+        height: 60,
+        transition: theme.transitions.create(['width', 'height'], { duration: '1s' }),
+        '&:hover': {
+          width: 300,
+          height: 300
+        }
       },
       title: {
         flexGrow: 1
