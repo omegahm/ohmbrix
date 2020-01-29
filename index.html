@@ -56,13 +56,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.min.js"></script>
   <script type="text/javascript">
     $(document).ready(() => {
-      let endDate = new Date("2020-01-29T10:00:00Z")
+      let endDate = new Date("2020-01-29T09:00:00Z")
       let timeToGo = (endDate - new Date()) / 1000
-      new FlipClock($('.count-down'), timeToGo, {
-        clockFace: 'DailyCounter',
-        countdown: true,
-        language: 'danish'
-      })
+      if (timeToGo > 0) {
+        new FlipClock($('.count-down'), timeToGo, {
+          clockFace: 'DailyCounter',
+          countdown: true,
+          language: 'danish'
+        })
+      } else {
+        $('.content-small').text('Flyt ind!')
+        $('.content-small').css({ fontSize: 60 })
+      }
     })
   </script>
 </body>
