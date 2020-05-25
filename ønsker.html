@@ -3,12 +3,14 @@
 <head>
   <title>Ohm Brix | Ønsker</title>
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 
   <style>
     html, body {
       height: 100%;
-      background-color: lightsteelblue;
+      background-color: white;
+      padding: 0;
+      margin: 0;
     }
   </style>
 </head>
@@ -21,162 +23,93 @@
 
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   <script type="text/babel">
-    function useHover() {
-      const [hover, setHover] = React.useState(false)
-      const ref = React.useRef(null)
-      const handleMouseOver = () => setHover(true)
-      const handleMouseOut = () => setHover(false)
-
-      React.useEffect(
-        () => {
-          const node = ref.current
-          if (node) {
-            node.addEventListener('mouseover', handleMouseOver)
-            node.addEventListener('mouseout', handleMouseOut)
-
-            return () => {
-              node.removeEventListener('mouseover', handleMouseOver)
-              node.removeEventListener('mouseout', handleMouseOut)
-            }
-          }
-        },
-        [ref.current]
-      )
-
-      return [ref, hover]
-    }
-
     const {
       createMuiTheme,
       makeStyles,
       AppBar,
-      Avatar,
-      Box,
+      Card,
+      CardActionArea,
+      CardContent,
+      CardMedia,
       Container,
-      Divider,
-      Icon,
+      Grid,
       LinearProgress,
-      List,
-      ListItem,
-      ListItemAvatar,
-      ListItemText,
-      ListSubheader,
-      Paper,
       Toolbar,
       Typography
     } = MaterialUI
-
-    const theme = createMuiTheme({
-      typography: {
-        fontFamily: [
-          '-apple-system',
-          'BlinkMacSystemFont',
-          '"Helvetica Neue"',
-          'Arial',
-          'sans-serif',
-          '"Apple Color Emoji"',
-          '"Segoe UI Emoji"',
-          '"Segoe UI Symbol"',
-        ].join(','),
-      }
-    })
 
     const useStyle = makeStyles(theme => ({
       root: {
         padding: theme.spacing(3, 2),
         marginBottom: 20
       },
-      bigAvatar: {
-        margin: '10px 20px 10px 5px',
-        width: 60,
-        height: 60,
-        transition: theme.transitions.create(['width', 'height'], { duration: '1s' }),
-        '&:hover': {
-          width: 300,
-          height: 300
-        }
+      cardGrid: {
+        paddingTop: theme.spacing(8),
+        paddingBottom: theme.spacing(8),
       },
-      title: {
-        flexGrow: 1
+      card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
       },
-      linkIcon: {
-        fontSize: '1.2rem',
-        lineHeight: 1.5,
-        paddingLeft: 5,
-        color: 'darkgray'
+      cardMedia: {
+        paddingTop: '56.25%'
       },
-      hoveredIcon: {
-        color: 'blue'
+      cardContent: {
+        flexGrow: 1,
+      },
+      categoryGrid: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(8)
+      },
+      handWriting: {
+        fontFamily: "'Permanent Marker', cursive"
       }
     }))
-
-    function ListItemLink(props) {
-      return <ListItem button component="a" {...props} />
-    }
 
     function Person(props){
       const classes = useStyle()
       const { name, categories } = props
 
-      return <Paper className={classes.root}>
-        <Typography variant="h5" component="h5" color="secondary">
+      return <React.Fragment>
+        <Typography className={classes.handWriting} variant="h2" component="h1" color="secondary">
           {name}
         </Typography>
         {categories.map((category, idx) => <Category key={`category-${idx}`} {...category} />)}
-      </Paper>
+      </React.Fragment>
     }
 
     function Category(props) {
+      const classes = useStyle()
       const { title, wishes } = props
 
-      const subheader = <ListSubheader disableSticky disableGutters>
-        <Typography variant="h6" component="h6">
+      return <React.Fragment>
+        <Typography className={classes.handWriting} variant="h3" component="h2">
           {title}
         </Typography>
-      </ListSubheader>
-
-      return <List subheader={subheader}>
-        {wishes.map((wish, idx) => (
-          <Box key={`wish-${idx}`}>
-            <Wish {...wish} />
-            {(idx !== wishes.length - 1 ? <Divider light component="li" /> : null)}
-          </Box>
-        ))}
-      </List>
+        <Grid className={classes.categoryGrid} container spacing={4}>
+          {wishes.map((wish, idx) => <Wish key={`wish-${idx}`} {...wish} />)}
+        </Grid>
+      </React.Fragment>
     }
 
     function Wish(props) {
       const classes = useStyle()
-
-      const [hoverRef, isHovered] = useHover()
-
       const { title, url, image } = props
+      const placeholder = 'https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small'
 
-      let listItem = listItemText => (
-        <React.Fragment>
-          <ListItemAvatar>
-            {image ?
-              <Avatar className={classes.bigAvatar} alt={title} src={image} /> :
-              <Avatar className={classes.bigAvatar}><Icon>face</Icon></Avatar>
-            }
-          </ListItemAvatar>
-          {listItemText}
-        </React.Fragment>
-      )
-
-      if (url) {
-        let text = (
-          <React.Fragment>
-            {title}
-            <Icon className={[classes.linkIcon, isHovered ? classes.hoveredIcon : ''].join(' ')}>link</Icon>
-          </React.Fragment>
-        )
-        let listItemText = <ListItemText ref={hoverRef} primary={text} />
-        return <ListItemLink href={url}>{listItem(listItemText)}</ListItemLink>
-      } else {
-        let listItemText = <ListItemText primary={title} />
-        return <ListItem>{listItem(listItemText)}</ListItem>
-      }
+      return <Grid item xs={12} sm={6} md={4}>
+        <Card className={classes.card}>
+          <CardActionArea onClick={() => url && window.location.assign(url)}>
+            <CardMedia className={classes.cardMedia} image={image || placeholder} title={title} />
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="body1" component="h3">
+                {title}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
     }
 
     function WishList() {
@@ -223,41 +156,44 @@
           })
       }
 
-      let loadingContent = <Paper className={classes.root}>
-        <Typography variant="h5" component="h5" color="secondary">
-          Indlæser...
+      let loadingContent = <React.Fragment>
+        <Typography className={classes.handWriting} variant="h2" component="h1" color="secondary">
+          ...
         </Typography>
-        <List subheader={
-          <ListSubheader disableGutters disableSticky>
-            <Typography variant="h6" component="h6">
-              {'...'}
-            </Typography>
-          </ListSubheader>
-        }>
-          <Box>
-            <ListItem>
-              <ListItemAvatar>
-              <Avatar className={classes.bigAvatar}><Icon>face</Icon></Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={'...'} />
-            </ListItem>
-          </Box>
-        </List>
-      </Paper>
+        <Typography className={classes.handWriting} variant="h3" component="h2">
+          ...
+        </Typography>
+        <Grid className={classes.categoryGrid} container spacing={4}>
+          {[1,2,3].map(_ => (
+            <Grid item xs={12} sm={6} md={4}>
+              <Card className={classes.card}>
+                <CardMedia className={classes.cardMedia} title={'...'} />
+                <CardContent className={classes.cardContent}>
+                  <Typography gutterBottom variant="body1" component="h3">
+                    <LinearProgress color="secondary" />
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </React.Fragment>
 
       let content = data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)
 
-      return <Container maxWidth="lg">
-        <AppBar style={{marginBottom: 10 + (loading ? 0 : 4), borderRadius: 4}} position="static">
+      return <React.Fragment>
+        <AppBar style={{marginBottom: 10 + (loading ? 0 : 4) }} position="static">
           <Toolbar>
-            <Typography variant="h4" style={{flexGrow: 1}}>
+            <Typography className={classes.handWriting} variant="h4" style={{flexGrow: 1}}>
               Ønsker
             </Typography>
           </Toolbar>
           {loading ? <LinearProgress color="secondary" /> : null}
         </AppBar>
-        {loading ? loadingContent : content}
-      </Container>
+        <Container maxWidth="lg">
+          {loading ? loadingContent : content}
+        </Container>
+      </React.Fragment>
     }
 
     ReactDOM.render(

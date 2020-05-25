@@ -1,8 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-  <title>Ohm Brix</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.css"/>
+  <title>Ohm Brix ❤️</title>
   <style>
     html, body {
       height: 100%;
@@ -27,48 +26,17 @@
     .content-small {
       font-size: 25pt;
     }
-
-    .flip-clock-wrapper {
-      margin-top: 20px;
-      width: auto;
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="content">
-      Husbyggeri 🏡
+      Ohm & Brix ❤️
     </div>
 
-    <div class="count-down"></div>
-
-    <br>
-
-    <div class="content content-small">
-      📦&nbsp;&nbsp;&nbsp;🔜&nbsp;&nbsp;&nbsp;🚚
-      <br>
-      29. januar 2020
+    <div class="content-small">
+      <a href="ønsker.html">Ønsker</a>
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.min.js"></script>
-  <script type="text/javascript">
-    $(document).ready(() => {
-      let endDate = new Date("2020-01-29T09:00:00Z")
-      let timeToGo = (endDate - new Date()) / 1000
-      if (timeToGo > 0) {
-        new FlipClock($('.count-down'), timeToGo, {
-          clockFace: 'DailyCounter',
-          countdown: true,
-          language: 'danish'
-        })
-      } else {
-        $('.content-small').text('Flyt ind!')
-        $('.content-small').css({ fontSize: 60 })
-      }
-    })
-  </script>
 </body>
 </html>
