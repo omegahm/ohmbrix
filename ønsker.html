@@ -2,13 +2,14 @@
 <html>
 <head>
   <title>Ohm Brix | Ønsker</title>
+  <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width">
+  <meta charset="utf-8">
 
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 
   <style>
     html, body {
       height: 100%;
-      background-color: white;
       padding: 0;
       margin: 0;
     }
@@ -24,7 +25,6 @@
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   <script type="text/babel">
     const {
-      createMuiTheme,
       makeStyles,
       AppBar,
       Card,
@@ -32,6 +32,7 @@
       CardContent,
       CardMedia,
       Container,
+      CssBaseline,
       Grid,
       LinearProgress,
       Toolbar,
@@ -39,10 +40,6 @@
     } = MaterialUI
 
     const useStyle = makeStyles(theme => ({
-      root: {
-        padding: theme.spacing(3, 2),
-        marginBottom: 20
-      },
       cardGrid: {
         paddingTop: theme.spacing(8),
         paddingBottom: theme.spacing(8),
@@ -164,13 +161,13 @@
           ...
         </Typography>
         <Grid className={classes.categoryGrid} container spacing={4}>
-          {[1,2,3].map(_ => (
-            <Grid item xs={12} sm={6} md={4}>
+          {Array(9).fill('').map((_, idx) => (
+            <Grid key={`grid-${idx}`} item xs={12} sm={6} md={4}>
               <Card className={classes.card}>
                 <CardMedia className={classes.cardMedia} title={'...'} />
                 <CardContent className={classes.cardContent}>
                   <Typography gutterBottom variant="body1" component="h3">
-                    <LinearProgress color="secondary" />
+                    ...
                   </Typography>
                 </CardContent>
               </Card>
@@ -182,17 +179,19 @@
       let content = data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)
 
       return <React.Fragment>
-        <AppBar style={{marginBottom: 10 + (loading ? 0 : 4) }} position="static">
+        <CssBaseline />
+        <AppBar position="relative">
           <Toolbar>
-            <Typography className={classes.handWriting} variant="h4" style={{flexGrow: 1}}>
-              Ønsker
+            <Typography className={classes.handWriting} variant="h4" color="inherit" noWrap>
+              Vores Ønsker
             </Typography>
           </Toolbar>
-          {loading ? <LinearProgress color="secondary" /> : null}
         </AppBar>
-        <Container maxWidth="lg">
-          {loading ? loadingContent : content}
-        </Container>
+        <main>
+          <Container maxWidth="lg">
+            {loading ? loadingContent : content}
+          </Container>
+        </main>
       </React.Fragment>
     }
 
