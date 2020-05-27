@@ -6,6 +6,7 @@
   <meta charset="utf-8">
 
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
   <style>
     html, body {
@@ -33,24 +34,31 @@
       CardMedia,
       Container,
       CssBaseline,
+      Fab,
       Grid,
+      Icon,
       LinearProgress,
       Toolbar,
       Typography
     } = MaterialUI
 
     const useStyle = makeStyles(theme => ({
+      fab: {
+        position: "fixed",
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+      },
       cardGrid: {
         paddingTop: theme.spacing(8),
         paddingBottom: theme.spacing(8),
       },
       card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
       },
       cardMedia: {
-        paddingTop: '56.25%'
+        paddingTop: "56.25%"
       },
       cardContent: {
         flexGrow: 1,
@@ -64,41 +72,41 @@
       }
     }))
 
-    function Person(props){
+    function Person(props) {
       const classes = useStyle()
-      const { name, categories } = props
+      const { name, categories, showPictures } = props
 
       return <React.Fragment>
         <Typography className={classes.handWriting} variant="h2" component="h1" color="secondary">
           {name}
         </Typography>
-        {categories.map((category, idx) => <Category key={`category-${idx}`} {...category} />)}
+        {categories.map((category, idx) => <Category key={`category-${idx}`} {...category} showPictures={showPictures} />)}
       </React.Fragment>
     }
 
     function Category(props) {
       const classes = useStyle()
-      const { title, wishes } = props
+      const { title, wishes, showPictures } = props
 
       return <React.Fragment>
         <Typography className={classes.handWriting} variant="h3" component="h2">
           {title}
         </Typography>
         <Grid className={classes.categoryGrid} container spacing={4}>
-          {wishes.map((wish, idx) => <Wish key={`wish-${idx}`} {...wish} />)}
+          {wishes.map((wish, idx) => <Wish key={`wish-${idx}`} {...wish} showPictures={showPictures} />)}
         </Grid>
       </React.Fragment>
     }
 
     function Wish(props) {
       const classes = useStyle()
-      const { title, url, image } = props
-      const placeholder = 'https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small'
+      const { title, url, image, showPictures } = props
+      const placeholder = "https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small"
 
       return <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
           <CardActionArea onClick={() => url && window.location.assign(url)}>
-            <CardMedia className={classes.cardMedia} image={image || placeholder} title={title} />
+            {showPictures && <CardMedia className={classes.cardMedia} image={image || placeholder} title={title} />}
             <CardContent className={classes.cardContent}>
               <Typography gutterBottom variant="body1" component="h3">
                 {title}
@@ -116,6 +124,8 @@
 
       const [data, setData] = React.useState([])
       const [loading, setLoading] = React.useState(true)
+      const [showPictures, setShowPictures] = React.useState(true)
+
       React.useEffect(loadData, [])
 
       function loadData() {
@@ -129,12 +139,12 @@
             data.feed.entry.forEach(row => {
               let name = row.gsx$name.$t
               if (name.match(/^##/)) {
-                let person = { name: name.replace(/^## /, ''), categories: [] }
+                let person = { name: name.replace(/^## /, ""), categories: [] }
                 lastPerson = person
                 result.push(person)
               } else if (name.match(/^--/)) {
                 let category = {
-                  title: name.replace(/^-- /, ''),
+                  title: name.replace(/^-- /, ""),
                   wishes: []
                 }
                 lastCategory = category
@@ -161,10 +171,10 @@
           ...
         </Typography>
         <Grid className={classes.categoryGrid} container spacing={4}>
-          {Array(9).fill('').map((_, idx) => (
+          {Array(9).fill("").map((_, idx) => (
             <Grid key={`grid-${idx}`} item xs={12} sm={6} md={4}>
               <Card className={classes.card}>
-                <CardMedia className={classes.cardMedia} title={'...'} />
+                <CardMedia className={classes.cardMedia} title={"..."} />
                 <CardContent className={classes.cardContent}>
                   <Typography gutterBottom variant="body1" component="h3">
                     ...
@@ -176,11 +186,11 @@
         </Grid>
       </React.Fragment>
 
-      let content = data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)
+      let content = data.map((person, idx) => <Person key={`person-${idx}`} {...person} showPictures={showPictures} />)
 
       return <React.Fragment>
         <CssBaseline />
-        <AppBar position="relative">
+        <AppBar position="static">
           <Toolbar>
             <Typography className={classes.handWriting} variant="h4" color="inherit" noWrap>
               Vores Ønsker
@@ -192,6 +202,9 @@
             {loading ? loadingContent : content}
           </Container>
         </main>
+        <Fab className={classes.fab} color={showPictures ? "primary" : "disabled"} onClick={e => setShowPictures(!showPictures)}>
+          {showPictures ? <Icon>camera_alt</Icon> : <Icon color="disabled">camera_alt</Icon>}
+        </Fab>
       </React.Fragment>
     }
 
