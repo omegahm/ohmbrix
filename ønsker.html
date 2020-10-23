@@ -28,12 +28,14 @@
     const {
       makeStyles,
       AppBar,
+      Backdrop,
       Card,
       CardActionArea,
       CardContent,
       CardMedia,
       Container,
       CssBaseline,
+      CircularProgress,
       Fab,
       Grid,
       Icon,
@@ -48,6 +50,12 @@
         bottom: theme.spacing(2),
         right: theme.spacing(2),
       },
+      actionArea: {
+        height: "100%"
+      },
+      backdrop: {
+        zIndex: theme.zIndex.tooltip
+      },
       cardGrid: {
         paddingTop: theme.spacing(8),
         paddingBottom: theme.spacing(8),
@@ -58,10 +66,14 @@
         flexDirection: "column",
       },
       cardMedia: {
-        paddingTop: "56.25%"
+        paddingTop: "56.25%",
+        backgroundSize: "contain",
+        margin: theme.spacing(2)
       },
       cardContent: {
         flexGrow: 1,
+        borderTop: "1px solid",
+        borderColor: theme.palette.grey[200]
       },
       categoryGrid: {
         paddingTop: theme.spacing(1),
@@ -92,7 +104,7 @@
         <Typography className={classes.handWriting} variant="h3" component="h2">
           {title}
         </Typography>
-        <Grid className={classes.categoryGrid} container spacing={4}>
+        <Grid className={classes.categoryGrid} container spacing={3}>
           {wishes.map((wish, idx) => <Wish key={`wish-${idx}`} {...wish} showPictures={showPictures} />)}
         </Grid>
       </React.Fragment>
@@ -103,9 +115,9 @@
       const { title, url, image, showPictures } = props
       const placeholder = "https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small"
 
-      return <Grid item xs={12} sm={6} md={4}>
+      return <Grid item xs={12} sm={6} md={3}>
         <Card className={classes.card}>
-          <CardActionArea onClick={() => url && window.location.assign(url)}>
+          <CardActionArea className={classes.actionArea} onClick={() => url && window.location.assign(url)}>
             {showPictures && <CardMedia className={classes.cardMedia} image={image || placeholder} title={title} />}
             <CardContent className={classes.cardContent}>
               <Typography gutterBottom variant="body1" component="h3">
@@ -170,9 +182,9 @@
         <Typography className={classes.handWriting} variant="h3" component="h2">
           ...
         </Typography>
-        <Grid className={classes.categoryGrid} container spacing={4}>
+        <Grid className={classes.categoryGrid} container spacing={3}>
           {Array(9).fill("").map((_, idx) => (
-            <Grid key={`grid-${idx}`} item xs={12} sm={6} md={4}>
+            <Grid key={`grid-${idx}`} item xs={12} sm={6} md={3}>
               <Card className={classes.card}>
                 <CardMedia className={classes.cardMedia} title={"..."} />
                 <CardContent className={classes.cardContent}>
@@ -205,6 +217,9 @@
         <Fab className={classes.fab} color={showPictures ? "primary" : "disabled"} onClick={e => setShowPictures(!showPictures)}>
           {showPictures ? <Icon>camera_alt</Icon> : <Icon color="disabled">camera_alt</Icon>}
         </Fab>
+        <Backdrop className={classes.backdrop} open={loading} transitionDuration={0}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </React.Fragment>
     }
 
