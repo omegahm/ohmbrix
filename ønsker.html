@@ -7,6 +7,8 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="shortcut icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkhHR7PUKI0VYn5zu0fO_X5gMd8LNJHJPkVA&usqp=CAU">
+
 
   <style>
     html, body {
@@ -71,7 +73,9 @@
         margin: theme.spacing(2)
       },
       cardContent: {
-        flexGrow: 1,
+        flexGrow: 1
+      },
+      cardContentBorder: {
         borderTop: "1px solid",
         borderColor: theme.palette.grey[200]
       },
@@ -84,9 +88,8 @@
       }
     }))
 
-    function Person(props) {
+    function Person({ name, categories, showPictures }) {
       const classes = useStyle()
-      const { name, categories, showPictures } = props
 
       return <React.Fragment>
         <Typography className={classes.handWriting} variant="h2" component="h1" color="secondary">
@@ -96,9 +99,8 @@
       </React.Fragment>
     }
 
-    function Category(props) {
+    function Category({ title, wishes, showPictures }) {
       const classes = useStyle()
-      const { title, wishes, showPictures } = props
 
       return <React.Fragment>
         <Typography className={classes.handWriting} variant="h3" component="h2">
@@ -110,16 +112,15 @@
       </React.Fragment>
     }
 
-    function Wish(props) {
+    function Wish({ title, url, image, showPictures }) {
       const classes = useStyle()
-      const { title, url, image, showPictures } = props
       const placeholder = "https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small"
 
       return <Grid item xs={12} sm={6} md={3}>
         <Card className={classes.card}>
           <CardActionArea className={classes.actionArea} onClick={() => url && window.location.assign(url)}>
             {showPictures && <CardMedia className={classes.cardMedia} image={image || placeholder} title={title} />}
-            <CardContent className={classes.cardContent}>
+            <CardContent className={showPictures ? [classes.cardContent, classes.cardContentBorder] : classes.cardContent}>
               <Typography gutterBottom variant="body1" component="h3">
                 {title}
               </Typography>
@@ -183,7 +184,7 @@
           ...
         </Typography>
         <Grid className={classes.categoryGrid} container spacing={3}>
-          {Array(9).fill("").map((_, idx) => (
+          {Array(8).fill("").map((_, idx) => (
             <Grid key={`grid-${idx}`} item xs={12} sm={6} md={3}>
               <Card className={classes.card}>
                 <CardMedia className={classes.cardMedia} title={"..."} />
@@ -205,7 +206,7 @@
         <AppBar position="static">
           <Toolbar>
             <Typography className={classes.handWriting} variant="h4" color="inherit" noWrap>
-              Vores Ønsker
+              Vores Ønsker - Ohm & Brix
             </Typography>
           </Toolbar>
         </AppBar>
