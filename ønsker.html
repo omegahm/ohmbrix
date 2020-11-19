@@ -89,6 +89,10 @@
       },
       divider: {
         marginBottom: theme.spacing(3)
+      },
+      linkIcon: {
+        marginRight: theme.spacing(1),
+        verticalAlign: "text-bottom"
       }
     }))
 
@@ -127,6 +131,7 @@
             {showPictures && <CardMedia className={classes.cardMedia} image={image || placeholder} title={title} />}
             <CardContent className={showPictures ? [classes.cardContent, classes.cardContentBorder] : classes.cardContent}>
               <Typography gutterBottom variant="body1" component="h3">
+                {url && <Icon className={classes.linkIcon} fontSize="small">link</Icon>}
                 {title}
               </Typography>
             </CardContent>
@@ -211,7 +216,7 @@
         <AppBar position="static">
           <Toolbar>
             <Typography className={classes.handWriting} variant="h4" color="inherit" noWrap>
-              Vores Ønsker - Ohm & Brix
+              Vores Ønsker
             </Typography>
           </Toolbar>
         </AppBar>
