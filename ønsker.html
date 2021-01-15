@@ -125,9 +125,19 @@
       const classes = useStyle()
       const placeholder = "https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small"
 
+      function goToLink(event) {
+        if (!url) { return }
+
+        if (event.ctrlKey || event.metaKey) {
+          window.open(url, '_blank').focus()
+        } else {
+          window.location.assign(url)
+        }
+      }
+
       return <Grid item xs={12} sm={6} md={3}>
         <Card className={classes.card}>
-          <CardActionArea className={classes.actionArea} onClick={() => url && window.location.assign(url)}>
+          <CardActionArea className={classes.actionArea} onClick={goToLink}>
             {showPictures && <CardMedia className={classes.cardMedia} image={image || placeholder} title={title} />}
             <CardContent className={showPictures ? [classes.cardContent, classes.cardContentBorder] : classes.cardContent}>
               <Typography gutterBottom variant="body1" component="h3">
