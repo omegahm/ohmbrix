@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="shortcut icon" href="present.png">
 
-
   <style>
     html, body {
       height: 100%;
@@ -100,7 +99,7 @@
       const classes = useStyle()
 
       return <React.Fragment>
-        <Typography className={classes.handWriting} variant="h2" component="h1" color="secondary">
+        <Typography id={name} className={classes.handWriting} variant="h2" component="h1" color="secondary">
           {name}
         </Typography>
         {categories.map((category, idx) => <Category key={`category-${idx}`} {...category} showPictures={showPictures} />)}
@@ -151,7 +150,7 @@
     }
 
     function WishList() {
-      const google_sheets_url = "https://spreadsheets.google.com/feeds/list/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/od6/public/values?alt=json"
+      const google_sheets_url = "https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=AIzaSyC2WDeyMkG_NaoKat8qiq-1NRX8xb-Cp3c"
 
       const classes = useStyle()
 
@@ -168,26 +167,29 @@
             let result = []
             let lastPerson = {}
             let lastCategory = {}
+            let skipRest = false
 
-            data.feed.entry.forEach(row => {
-              let name = row.gsx$name.$t
-              if (name.match(/^##/)) {
-                let person = { name: name.replace(/^## /, ""), categories: [] }
+            data.values.forEach(row => {
+              let [title, url, image] = row
+
+              if (title === undefined || skipRest) {
+                skipRest = true
+                return
+              }
+
+              if (title.match(/^##/)) {
+                let person = { name: title.replace(/^## /, ""), categories: [] }
                 lastPerson = person
                 result.push(person)
-              } else if (name.match(/^--/)) {
+              } else if (title.match(/^--/)) {
                 let category = {
-                  title: name.replace(/^-- /, ""),
+                  title: title.replace(/^-- /, ""),
                   wishes: []
                 }
                 lastCategory = category
                 lastPerson.categories.push(category)
               } else {
-                let wish = {
-                  title: name,
-                  url: row.gsx$link.$t,
-                  image: row.gsx$image.$t
-                }
+                let wish = { title, url, image }
                 lastCategory.wishes.push(wish)
               }
             })
