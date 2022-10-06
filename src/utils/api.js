@@ -1,7 +1,6 @@
 import { calcDaysUntil } from "../utils/days_until";
 
-const google_sheets_url =
-  "https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=AIzaSyC2WDeyMkG_NaoKat8qiq-1NRX8xb-Cp3c";
+const google_sheets_url = `https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=${process.env.REACT_APP_GOOGLE_SHEETS_API_KEY}`;
 
 async function loadData() {
   const response = await fetch(google_sheets_url);
