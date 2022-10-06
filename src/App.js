@@ -58,17 +58,8 @@ theme = createTheme({
     MuiCardMedia: {
       styleOverrides: {
         root: {
-          height: 0,
-          paddingTop: "56.25%", // 16:9
-          backgroundSize: "contain",
-          margin: theme.spacing(2),
-        },
-      },
-    },
-    MuiCardContent: {
-      styleOverrides: {
-        root: {
-          flexGrow: 1,
+          objectFit: "contain",
+          padding: theme.spacing(2),
         },
       },
     },
@@ -98,7 +89,7 @@ function App() {
 
       setLoading(false);
     }
-    
+
     fetchData();
   }, [setContent, setLoading]);
 

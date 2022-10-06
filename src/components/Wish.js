@@ -30,9 +30,14 @@ function Wish({ title, url, image }) {
 
   return (
     <Grid item xs={12} sm={6} md={3}>
-      <Card>
+      <Card variant="outlined">
         <CardActionArea onClick={goToLink}>
-          <CardMedia image={image || placeholder} title={title} />
+          <CardMedia
+            component="img"
+            height="200"
+            image={image || placeholder}
+            title={title}
+          />
           <CardContent>
             <Typography gutterBottom variant="body1" component="h3">
               {url && (
