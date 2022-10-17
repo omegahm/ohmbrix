@@ -14,8 +14,7 @@ import LoadingContent from "./components/LoadingContent";
 
 import loadData from "./utils/api";
 
-let theme = createTheme({});
-theme = createTheme({
+let theme = createTheme({
   palette: {
     primary: {
       main: "#3f51b5",
@@ -55,18 +54,32 @@ theme = createTheme({
         },
       },
     },
+  },
+});
+
+theme = createTheme(theme, {
+  typography: {
+    h2: {
+      fontSize: "3.75rem",
+      marginTop: "1.5rem",
+      [theme.breakpoints.down("md")]: {
+        fontSize: "3rem",
+      },
+    },
+    h3: {
+      marginTop: "1.5rem",
+      marginBottom: "1rem",
+    },
+    h4: {
+      fontSize: "1.25rem",
+    },
+  },
+  components: {
     MuiCardMedia: {
       styleOverrides: {
         root: {
           objectFit: "contain",
           padding: theme.spacing(2),
-        },
-      },
-    },
-    MuiDivider: {
-      styleOverrides: {
-        root: {
-          marginBottom: theme.spacing(3),
         },
       },
     },
