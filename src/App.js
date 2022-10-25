@@ -11,6 +11,7 @@ import {
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Person from "./components/Person";
 import LoadingContent from "./components/LoadingContent";
+import "./App.css";
 
 import loadData from "./utils/api";
 
