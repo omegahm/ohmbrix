@@ -122,11 +122,8 @@ function App() {
           {loading ? <LoadingContent /> : content}
         </Container>
       </main>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
+      <Backdrop open={loading}>
+        <CircularProgress size={100} variant="indeterminate" color="primary" />
       </Backdrop>
     </ThemeProvider>
   );
