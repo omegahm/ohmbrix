@@ -118,7 +118,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <main>
-        <Container maxWidth="xl">
+        <Container maxWidth={false}>
           {loading ? <LoadingContent /> : content}
         </Container>
       </main>
