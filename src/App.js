@@ -38,6 +38,13 @@ let theme = createTheme({
     },
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: (themeParam) => ({
+        body: {
+          marginBottom: 30,
+        },
+      }),
+    },
     MuiCard: {
       styleOverrides: {
         root: {
