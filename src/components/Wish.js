@@ -31,14 +31,16 @@ function Wish({ title, url, image }) {
 
   let urlName = "";
   try {
-    urlName = new URL(url).hostname.replace(/^www./, "").replace(/\..*$/, "");
+    if (url) {
+      urlName = new URL(url).hostname.replace(/^www./, "").replace(/\..*$/, "");
+    }
   } catch (e) {
-    console.error(`Couldn't parse ${url}`);
+    console.error(`Couldn't parse "${url}"`);
   }
 
   return (
     <Grid item xs={12} sm={6} md={3}>
-      <Card variant="outlined">
+      <Card variant="outlined" style={{ borderColor: theme.palette.grey[300] }}>
         <CardActionArea onClick={goToLink}>
           <CardMedia
             component="img"
@@ -56,7 +58,13 @@ function Wish({ title, url, image }) {
           <Button
             onClick={goToLink}
             size="small"
-            style={{ padding: 5, borderTop: "1px solid", borderRadius: 0 }}
+            style={{
+              padding: 5,
+              borderTopWidth: "1px",
+              borderTopStyle: "solid",
+              borderTopColor: theme.palette.grey[300],
+              borderRadius: 0,
+            }}
           >
             <Icon
               sx={{
