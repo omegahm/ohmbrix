@@ -10,3 +10,15 @@ export function calcDaysUntil(date) {
 
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
+
+export function calcAge(date) {
+  date = new Date(date);
+  const today = new Date();
+  const birthdayThisYear = new Date(date).setFullYear(today.getFullYear());
+
+  if (birthdayThisYear > today) {
+    return today.getFullYear() - date.getFullYear();
+  } else {
+    return today.getFullYear() - date.getFullYear() + 1;
+  }
+}

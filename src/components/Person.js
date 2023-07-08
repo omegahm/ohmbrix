@@ -1,10 +1,11 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import Category from "./Category";
-import { calcDaysUntil } from "../utils/days_until";
+import { calcDaysUntil, calcAge } from "../utils/days_until";
 
 function Person({ name, categories, birthday }) {
   const dayUntilBirthday = calcDaysUntil(birthday);
+  const age = calcAge(birthday);
 
   return (
     <>
@@ -14,7 +15,9 @@ function Person({ name, categories, birthday }) {
       {birthday && (
         <Typography variant="h4" component="h3" color="secondary">
           {`${dayUntilBirthday} dag${dayUntilBirthday === 1 ? "" : "e"} til
-          fødselsdag`}
+          fødselsdag (`}
+          {age}
+          {` år)`}
         </Typography>
       )}
 
