@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   Grid,
   Card,
   CardActionArea,
@@ -28,6 +29,13 @@ function Wish({ title, url, image }) {
     }
   }
 
+  let urlName = "";
+  try {
+    urlName = new URL(url).hostname.replace(/^www./, "").replace(/\..*$/, "");
+  } catch (e) {
+    console.error(`Couldn't parse ${url}`);
+  }
+
   return (
     <Grid item xs={12} sm={6} md={3}>
       <Card variant="outlined">
@@ -40,21 +48,28 @@ function Wish({ title, url, image }) {
           />
           <CardContent>
             <Typography gutterBottom variant="body1" component="h3">
-              {url && (
-                <Icon
-                  sx={{
-                    marginRight: theme.spacing(1),
-                    verticalAlign: "text-bottom",
-                  }}
-                  fontSize="small"
-                >
-                  link
-                </Icon>
-              )}
               {title}
             </Typography>
           </CardContent>
         </CardActionArea>
+        {url && (
+          <Button
+            onClick={goToLink}
+            size="small"
+            style={{ padding: 5, borderTop: "1px solid", borderRadius: 0 }}
+          >
+            <Icon
+              sx={{
+                marginRight: theme.spacing(1),
+                verticalAlign: "text-bottom",
+              }}
+              fontSize="small"
+            >
+              link
+            </Icon>
+            {urlName}
+          </Button>
+        )}
       </Card>
     </Grid>
   );
