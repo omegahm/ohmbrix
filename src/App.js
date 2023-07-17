@@ -109,15 +109,17 @@ function App() {
       setNames(data.map((person) => person.name));
 
       setContent(
-        data.sort((a, b) => {
-          if (a.birthday === undefined) {
-            return 1;
-          }
-          if (b.birthday === undefined) {
-            return -1;
-          }
-          return calcDaysUntil(a.birthday) - calcDaysUntil(b.birthday);
-        }).map((person, idx) => <Person key={`person-${idx}`} {...person} />)
+        data
+          .sort((a, b) => {
+            if (a.birthday === undefined) {
+              return 1;
+            }
+            if (b.birthday === undefined) {
+              return -1;
+            }
+            return calcDaysUntil(a.birthday) - calcDaysUntil(b.birthday);
+          })
+          .map((person, idx) => <Person key={`person-${idx}`} {...person} />)
       );
 
       setLoading(false);
@@ -131,15 +133,25 @@ function App() {
       <CssBaseline />
       <AppBar position="fixed" color="primary">
         <Toolbar>
-          <Typography variant="h4" color="inherit" noWrap>
+          <Typography
+            variant="h4"
+            color="inherit"
+            noWrap
+            sx={{
+              display: {
+                xs: "none",
+                sm: "flex",
+              },
+            }}
+          >
             Vores Ønsker
           </Typography>
 
           <Box
             sx={{
               flexGrow: 1,
-              display: { xs: "none", sm: "flex" },
-              justifyContent: "end",
+              display: "flex",
+              justifyContent: { xs: "space-around", sm: "end" },
             }}
           >
             {names.map((name) => (
@@ -153,9 +165,10 @@ function App() {
                   });
                 }}
                 sx={{
-                  my: 2,
+                  minWidth: { xs: 55, sm: 64 },
                   color: "white",
                   display: "block",
+                  fontSize: { xs: 7, sm: 14 },
                   fontFamily: "Permanent Marker",
                 }}
               >
