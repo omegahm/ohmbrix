@@ -1,5 +1,3 @@
-import { calcDaysUntil } from "../utils/days_until";
-
 const google_sheets_url = `https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=${process.env.REACT_APP_GOOGLE_SHEETS_API_KEY}`;
 
 async function loadData() {
@@ -40,16 +38,6 @@ async function loadData() {
       const wish = { title, url, image };
       currentCategory.wishes.push(wish);
     }
-  });
-
-  result = result.sort((a, b) => {
-    if (a.birthday === undefined) {
-      return 1;
-    }
-    if (b.birthday === undefined) {
-      return -1;
-    }
-    return calcDaysUntil(a.birthday) - calcDaysUntil(b.birthday);
   });
 
   return result;

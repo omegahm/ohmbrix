@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   AppBar,
+  Box,
+  Button,
   Toolbar,
   Typography,
   Container,
@@ -13,6 +15,7 @@ import Person from "./components/Person";
 import LoadingContent from "./components/LoadingContent";
 
 import loadData from "./utils/api";
+import { calcDaysUntil } from "./utils/days_until";
 
 let theme = createTheme({
   palette: {
@@ -95,6 +98,7 @@ theme = createTheme(theme, {
 
 function App() {
   const [content, setContent] = useState([]);
+  const [names, setNames] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -102,9 +106,18 @@ function App() {
       setLoading(true);
 
       const data = await loadData();
+      setNames(data.map((person) => person.name));
 
       setContent(
-        data.map((person, idx) => <Person key={`person-${idx}`} {...person} />)
+        data.sort((a, b) => {
+          if (a.birthday === undefined) {
+            return 1;
+          }
+          if (b.birthday === undefined) {
+            return -1;
+          }
+          return calcDaysUntil(a.birthday) - calcDaysUntil(b.birthday);
+        }).map((person, idx) => <Person key={`person-${idx}`} {...person} />)
       );
 
       setLoading(false);
@@ -116,18 +129,49 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="static" color="primary">
+      <AppBar position="fixed" color="primary">
         <Toolbar>
           <Typography variant="h4" color="inherit" noWrap>
             Vores Ønsker
           </Typography>
+
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", sm: "flex" },
+              justifyContent: "end",
+            }}
+          >
+            {names.map((name) => (
+              <Button
+                key={name}
+                onClick={() => {
+                  let elem = document.getElementById(`${name}`);
+                  window.scrollTo({
+                    behavior: "smooth",
+                    top: elem.offsetTop - 70,
+                  });
+                }}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  fontFamily: "Permanent Marker",
+                }}
+              >
+                {name}
+              </Button>
+            ))}
+          </Box>
         </Toolbar>
       </AppBar>
-      <main>
+
+      <main style={{ marginTop: 70 }}>
         <Container maxWidth={false}>
           {loading ? <LoadingContent /> : content}
         </Container>
       </main>
+
       <Backdrop open={loading}>
         <CircularProgress size={100} variant="indeterminate" color="primary" />
       </Backdrop>
