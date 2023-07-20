@@ -17,6 +17,8 @@ import LoadingContent from "./components/LoadingContent";
 import loadData from "./utils/api";
 import { calcDaysUntil } from "./utils/days_until";
 
+const SCROLL_OFFSET = 40;
+
 let theme = createTheme({
   palette: {
     primary: {
@@ -132,12 +134,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position="fixed" color="primary">
-        <Toolbar>
+        <Toolbar style={{ minHeight: 36 }}>
           <Typography
             variant="h4"
             color="inherit"
             noWrap
             sx={{
+              fontSize: 14,
               display: {
                 xs: "none",
                 sm: "flex",
@@ -161,14 +164,14 @@ function App() {
                   let elem = document.getElementById(`${name}`);
                   window.scrollTo({
                     behavior: "smooth",
-                    top: elem.offsetTop - 70,
+                    top: elem.offsetTop - SCROLL_OFFSET,
                   });
                 }}
                 sx={{
                   minWidth: { xs: 55, sm: 64 },
                   color: "white",
                   display: "block",
-                  fontSize: { xs: 7, sm: 14 },
+                  fontSize: { xs: 9, sm: 14 },
                   fontFamily: "Permanent Marker",
                 }}
               >
@@ -179,7 +182,7 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <main style={{ marginTop: 70 }}>
+      <main style={{ marginTop: SCROLL_OFFSET }}>
         <Container maxWidth={false}>
           {loading ? <LoadingContent /> : content}
         </Container>
