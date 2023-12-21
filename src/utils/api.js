@@ -6,7 +6,7 @@ async function loadData() {
 
   let result = [];
   let currentPerson = {};
-  let currentCategory = {};
+  let currentCategory = null;
   let skipRest = false;
 
   data.values.forEach((row) => {
@@ -22,9 +22,11 @@ async function loadData() {
         name: title.replace(/^## /, ""),
         categories: [],
         birthday: url,
+        details: [],
       };
 
       currentPerson = person;
+      currentCategory = null;
       result.push(person);
     } else if (title.match(/^--/)) {
       const category = {
@@ -36,7 +38,12 @@ async function loadData() {
       currentPerson.categories.push(category);
     } else {
       const wish = { title, url, image };
-      currentCategory.wishes.push(wish);
+
+      if (currentCategory == null) {
+        currentPerson.details.push(title);
+      } else {
+        currentCategory.wishes.push(wish);
+      }
     }
   });
 
