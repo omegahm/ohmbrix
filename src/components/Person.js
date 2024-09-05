@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Card,
   CardContent,
@@ -7,17 +8,18 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
-import Category from "./Category";
-import { calcDaysUntil, calcAge } from "../utils/days_until";
+import { Category } from "./Category";
 
-function Person({ name, categories, birthday, details }) {
+import { calcAge, calcDaysUntil } from "../utils/days_until";
+
+export const Person = ({ name, categories, birthday, details }) => {
   if (birthday.includes("12-24")) {
     birthday = null;
   }
 
   const dayUntilBirthday = calcDaysUntil(birthday);
   const age = calcAge(birthday);
-  const days = `dag${dayUntilBirthday === 1 ? "" : "e"}`;
+  const days = dayUntilBirthday === 1 ? "dag" : "dage";
 
   return (
     <>
@@ -39,6 +41,7 @@ function Person({ name, categories, birthday, details }) {
                 <Typography variant="h4" component="h5" color="secondary">
                   Noter
                 </Typography>
+
                 <List>
                   {details.map((detail) => (
                     <ListItem key={detail} variant="body1" disablePadding>
@@ -53,10 +56,8 @@ function Person({ name, categories, birthday, details }) {
       )}
 
       {categories.map((category) => (
-        <Category key={category.name} {...category} />
+        <Category key={category.title} {...category} />
       ))}
     </>
   );
-}
-
-export default Person;
+};

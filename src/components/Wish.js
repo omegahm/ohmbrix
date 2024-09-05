@@ -1,23 +1,25 @@
 import React from "react";
+
 import {
   Button,
-  Grid,
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
-  Typography,
+  CardMedia,
+  Grid,
   Icon,
+  Typography,
 } from "@mui/material";
+
 import { useTheme } from "@emotion/react";
 
-function Wish({ title, url, image }) {
+export const Wish = ({ title, url, image }) => {
   const theme = useTheme();
 
   const placeholder =
     "https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small";
 
-  function goToLink(event) {
+  const goToLink = (event) => {
     if (!url) {
       return;
     }
@@ -27,7 +29,7 @@ function Wish({ title, url, image }) {
     } else {
       window.location.assign(url);
     }
-  }
+  };
 
   let urlName = "";
   try {
@@ -54,6 +56,7 @@ function Wish({ title, url, image }) {
             </Typography>
           </CardContent>
         </CardActionArea>
+
         {url && (
           <Button
             onClick={goToLink}
@@ -81,6 +84,4 @@ function Wish({ title, url, image }) {
       </Card>
     </Grid>
   );
-}
-
-export default Wish;
+};

@@ -19,6 +19,20 @@ const config = [
   },
   {
     rules: {
+      "sort-imports": [
+        "error",
+        {
+          allowSeparatedGroups: true,
+        },
+      ],
+      "no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "react/prop-types": "off",
     },
   },

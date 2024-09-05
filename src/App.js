@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import {
   AppBar,
+  Backdrop,
   Box,
   Button,
-  Toolbar,
-  Typography,
+  CircularProgress,
   Container,
   CssBaseline,
-  Backdrop,
-  CircularProgress,
+  Toolbar,
+  Typography,
 } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Person from "./components/Person";
-import LoadingContent from "./components/LoadingContent";
 
-import loadData from "./utils/api";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { LoadingContent } from "./components/LoadingContent";
+import { Person } from "./components/Person";
+
 import { calcDaysUntil } from "./utils/days_until";
+import { loadData } from "./utils/api";
 
 const SCROLL_OFFSET = 40;
 
@@ -98,13 +100,13 @@ theme = createTheme(theme, {
   },
 });
 
-function App() {
+export const App = () => {
   const [content, setContent] = useState([]);
   const [names, setNames] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       setLoading(true);
 
       const data = await loadData();
@@ -125,7 +127,7 @@ function App() {
       );
 
       setLoading(false);
-    }
+    };
 
     fetchData();
   }, [setContent, setLoading]);
@@ -193,6 +195,4 @@ function App() {
       </Backdrop>
     </ThemeProvider>
   );
-}
-
-export default App;
+};

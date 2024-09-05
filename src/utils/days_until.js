@@ -1,5 +1,5 @@
-export function calcDaysUntil(date) {
-  date = new Date(date);
+export const calcDaysUntil = (dateAsString) => {
+  const date = new Date(dateAsString);
   date.setFullYear(new Date().getFullYear());
 
   let diff = date.getTime() - new Date().getTime();
@@ -9,16 +9,18 @@ export function calcDaysUntil(date) {
   }
 
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
-}
+};
 
-export function calcAge(date) {
-  date = new Date(date);
+export const calcAge = (dateAsString) => {
+  const date = new Date(dateAsString);
   const today = new Date();
-  const birthdayThisYear = new Date(date).setFullYear(today.getFullYear());
+  const birthdayThisYear = new Date(dateAsString).setFullYear(
+    today.getFullYear()
+  );
 
   if (birthdayThisYear > today) {
     return today.getFullYear() - date.getFullYear();
   } else {
     return today.getFullYear() - date.getFullYear() + 1;
   }
-}
+};
