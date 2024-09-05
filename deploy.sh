@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Build the project
-yarn build
+npm run build
 
 # Copy the build folder to the server
 sftp -b - ohmbrix.dk <<EOF
