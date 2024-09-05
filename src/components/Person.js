@@ -12,6 +12,8 @@ import { Category } from "./Category";
 
 import { calcAge, calcDaysUntil } from "../utils/days_until";
 
+import Realistic from "react-canvas-confetti/dist/presets/realistic";
+
 export const Person = ({ name, categories, birthday, details }) => {
   if (birthday.includes("12-24")) {
     birthday = null;
@@ -23,6 +25,17 @@ export const Person = ({ name, categories, birthday, details }) => {
 
   return (
     <>
+      {dayUntilBirthday <= 7 && (
+        <Realistic
+          autorun={{ speed: 3, delay: 1000, duration: 200 }}
+          globalOptions={{
+            resize: true,
+            useWorker: true,
+            disableForReducedMotion: true,
+          }}
+        />
+      )}
+
       <Typography id={name} variant="h2" component="h1" color="secondary">
         {name}
       </Typography>
