@@ -9,8 +9,8 @@ function Category({ title, wishes }) {
         {title}
       </Typography>
       <Grid container spacing={3}>
-        {wishes.map((wish, idx) => (
-          <Wish key={`wish-${idx}`} {...wish} />
+        {wishes.map((wish) => (
+          <Wish key={wish.title} {...wish} />
         ))}
       </Grid>
     </>

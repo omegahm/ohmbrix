@@ -30,21 +30,21 @@ let theme = createTheme({
   },
   typography: {
     h1: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
     },
     h2: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
     },
     h3: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
     },
     h4: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
     },
   },
   components: {
     MuiCssBaseline: {
-      styleOverrides: (themeParam) => ({
+      styleOverrides: () => ({
         body: {
           marginBottom: 30,
         },
@@ -121,7 +121,7 @@ function App() {
             }
             return calcDaysUntil(a.birthday) - calcDaysUntil(b.birthday);
           })
-          .map((person, idx) => <Person key={`person-${idx}`} {...person} />)
+          .map((person) => <Person key={person.name} {...person} />)
       );
 
       setLoading(false);

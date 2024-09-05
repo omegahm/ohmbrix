@@ -1,3 +1,4 @@
+/* global process */
 const google_sheets_url = `https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=${process.env.REACT_APP_GOOGLE_SHEETS_API_KEY}`;
 
 async function loadData() {
