@@ -3,26 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.10.4",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.10.4",
-    "@mui/material": "^5.15.0",
+    "@mui/material": "^6.1.0",
     "canvas-confetti": "^1.9.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "web-vitals": "^2.1.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "PUBLIC_URL=https://ohmbrix.dk react-scripts build",
     "deploy": "./deploy.sh"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
+  "eslintConfig": {},
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/js": "^9.9.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.35.2",
