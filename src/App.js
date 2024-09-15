@@ -185,6 +185,16 @@ export const App = () => {
       </AppBar>
 
       <main style={{ marginTop: SCROLL_OFFSET }}>
+        <canvas
+          id="confetti"
+          style={{
+            zIndex: 1,
+            position: "fixed",
+            top: 0,
+            width: "100vw",
+            height: "100vh",
+          }}
+        />
         <Container maxWidth={false}>
           {loading ? <LoadingContent /> : content}
         </Container>

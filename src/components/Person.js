@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   Card,
@@ -12,7 +12,7 @@ import { Category } from "./Category";
 
 import { calcAge, calcDaysUntil } from "../utils/days_until";
 
-import Realistic from "react-canvas-confetti/dist/presets/realistic";
+import confetti from "canvas-confetti";
 
 export const Person = ({ name, categories, birthday, details }) => {
   if (birthday.includes("12-24")) {
@@ -23,19 +23,29 @@ export const Person = ({ name, categories, birthday, details }) => {
   const age = calcAge(birthday);
   const days = dayUntilBirthday === 1 ? "dag" : "dage";
 
+  const flags = confetti.shapeFromText({ text: "🇩🇰", scalar: 3 });
+  const flagConfetti = confetti.create(document.querySelector("#confetti"), {
+    resize: true,
+    useWorker: false,
+    disableForReducedMotion: true,
+  });
+
+  useEffect(() => {
+    if (dayUntilBirthday < 30) {
+      flagConfetti({
+        particleCount: 200,
+        angle: -90,
+        spread: 135,
+        ticks: 400,
+        origin: { x: 0.5, y: -0.3 },
+        shapes: [flags],
+        scalar: 3,
+      });
+    }
+  }, [dayUntilBirthday, flags, flagConfetti]);
+
   return (
     <>
-      {dayUntilBirthday <= 7 && (
-        <Realistic
-          autorun={{ speed: 3, delay: 1000, duration: 200 }}
-          globalOptions={{
-            resize: true,
-            useWorker: true,
-            disableForReducedMotion: true,
-          }}
-        />
-      )}
-
       <Typography id={name} variant="h2" component="h1" color="secondary">
         {name}
       </Typography>
