@@ -32,16 +32,16 @@ let theme = createTheme({
   },
   typography: {
     h1: {
-      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
     },
     h2: {
-      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
     },
     h3: {
-      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
     },
     h4: {
-      fontFamily: ["Kalam", "Permanent Marker", "sans-serif"].join(","),
+      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
     },
   },
   components: {
