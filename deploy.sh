@@ -5,6 +5,7 @@ npm run build
 
 # Copy the build folder to the server
 sftp -b - ohmbrix.dk <<EOF
+  put index.html
   put -r build/static
   put build/asset-manifest.json
   put build/manifest.json
