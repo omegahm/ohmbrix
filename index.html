@@ -65,7 +65,9 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const houseDone = new Date(2025, 0, 17, 12, 0, 0).getTime() / 1000;
-        new FlipDown(houseDone).start();
+        new FlipDown(houseDone, {
+          headings: ["Dage", "Timer", "Minutter", "Sekunder"],
+        }).start();
       });
     </script>
   </body>
