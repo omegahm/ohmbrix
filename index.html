@@ -68,10 +68,18 @@
     <script src="https://cdn.jsdelivr.net/npm/flipdown@0.3.2/src/flipdown.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const houseDone = new Date(2025, 0, 17, 12, 0, 0).getTime() / 1000;
+        const houseDone = new Date(2025, 0, 22, 9, 0, 0).getTime() / 1000;
         new FlipDown(houseDone, {
           headings: ["Dage", "Timer", "Minutter", "Sekunder"],
-        }).start();
+        })
+          .start()
+          .ifEnded(() => {
+            const element = document.getElementById("flipdown");
+            element.innerHTML = "🎉";
+            element.style.fontSize = "60pt";
+            element.style.display = "flex";
+            element.style.justifyContent = "center";
+          });
       });
     </script>
   </body>
