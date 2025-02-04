@@ -61,26 +61,6 @@
         <a href="/ønsker.html">Vores ønsker</a>
       </div>
     </div>
-    <div class="container">
-      <div class="content">Hus færdigt! 🏡</div>
-      <div id="flipdown" class="flipdown"></div>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/flipdown@0.3.2/src/flipdown.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const houseDone = new Date(2025, 0, 22, 9, 0, 0).getTime() / 1000;
-        new FlipDown(houseDone, {
-          headings: ["Dage", "Timer", "Minutter", "Sekunder"],
-        })
-          .start()
-          .ifEnded(() => {
-            const element = document.getElementById("flipdown");
-            element.innerHTML = "🎉";
-            element.style.fontSize = "60pt";
-            element.style.display = "flex";
-            element.style.justifyContent = "center";
-          });
-      });
-    </script>
   </body>
 </html>
