@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="present.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ohm Brix | Ønsker | Text</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      h1, h2, h3 {
+        font-family: "Permanent Marker", cursive;
+      }
+
+      h1 {
+        margin: 0;
+        padding: 0.5rem;
+        background-color: #3f51b5;
+        color: #f0f0f0;
+      }
+
+      h2 {
+        color: #f50057;
+        font-size: 1.75rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      h3 {
+        font-size: 1.2em;
+        margin: 0;
+        padding: 0;
+      }
+
+      section {
+        margin: 0.5rem;
+        padding: 0.5rem;
+      }
+
+      a {
+        color: #333;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Vores ønsker</h1>
+
+    <div id="root">Indlæser...</div>
+
+    <script>
+      const google_sheets_url = "https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=AIzaSyC2WDeyMkG_NaoKat8qiq-1NRX8xb-Cp3c";
+
+      const request = new XMLHttpRequest();
+
+      request.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          let response = this.responseText;
+          let json = JSON.parse(response);
+
+          let currentPerson = null;
+          let currentCategory = null;
+
+          const root = document.getElementById("root");
+          root.innerHTML = "";
+
+          json.values.forEach((row) => {
+            const [title, url, image] = row;
+            if (!title) {
+              return
+            }
+
+            if (title.match(/^##/)) {
+              if (currentPerson) {
+                root.appendChild(currentPerson);
+              }
+
+              currentPerson = document.createElement("section");
+              currentPerson.innerHTML = `<h2>${title.replace(/^##/, "")}</h2>`;
+              currentCategory = null;
+            } else if (title.match(/^--/)) {
+              if (currentPerson) {
+                const categoryTitle = document.createElement("h3");
+                categoryTitle.innerHTML = title.replace(/^--/, "");
+                currentPerson.appendChild(categoryTitle);
+
+                currentCategory = document.createElement("ul");
+                currentPerson.appendChild(currentCategory);
+              }
+            } else {
+              if (currentCategory) {
+                let listItem = document.createElement("li");
+                listItem.innerHTML = `<a href="${url}">${title}</a>`;
+                currentCategory.appendChild(listItem);
+              }
+            }
+          });
+        }
+      }
+
+      request.open("GET", google_sheets_url, true);
+      request.send();
+    </script>
+  </body>
+</html>
