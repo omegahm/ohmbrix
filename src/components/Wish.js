@@ -41,7 +41,7 @@ export const Wish = ({ title, url, image }) => {
   }
 
   return (
-    <Grid item xs={12} sm={6} md={3}>
+    <Grid item xs={12} sm={6} md={3} xl={2}>
       <Card variant="outlined" style={{ borderColor: theme.palette.grey[300] }}>
         <CardActionArea onClick={goToLink}>
           <CardMedia

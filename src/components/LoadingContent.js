@@ -16,7 +16,7 @@ export const LoadingContent = () => (
       {Array(12)
         .fill("")
         .map((_, idx) => (
-          <Grid key={`grid-${idx}`} item xs={12} sm={6} md={3}>
+          <Grid key={`grid-${idx}`} item xs={12} sm={6} md={3} xl={2}>
             <Card>
               <Skeleton sx={{ height: 190 }} variant="rectangular" />
 
