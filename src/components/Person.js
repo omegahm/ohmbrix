@@ -23,7 +23,14 @@ export const Person = ({ name, categories, birthday, details }) => {
   const age = calcAge(birthday);
   const days = dayUntilBirthday === 1 ? "dag" : "dage";
 
-  const flags = confetti.shapeFromText({ text: "🇩🇰", scalar: 3 });
+  let flagChars = birthday ? ["🇩🇰", "🎂", "🎉"] : ["🎄", "🎅🏻", "❄️", "⛄️"];
+  const flags = flagChars.map((char) => {
+    return confetti.shapeFromText({
+      text: char,
+      scalar: 3,
+    });
+  });
+
   const flagConfetti = confetti.create(document.querySelector("#confetti"), {
     resize: true,
     useWorker: false,
@@ -38,7 +45,7 @@ export const Person = ({ name, categories, birthday, details }) => {
         spread: 135,
         ticks: 400,
         origin: { x: 0.5, y: -0.3 },
-        shapes: [flags],
+        shapes: flags,
         scalar: 3,
       });
     }
