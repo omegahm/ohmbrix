@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -27,7 +27,9 @@
         color: #333;
       }
 
-      h1, h2, h3 {
+      h1,
+      h2,
+      h3 {
         font-family: "Permanent Marker", cursive;
       }
 
@@ -77,14 +79,17 @@
   <body>
     <h1>Vores ønsker</h1>
 
-    <div id="root">Indlæser...</div>
+    <div id="root">
+      <h2 style="padding: 10px">Indlæser...</h2>
+    </div>
 
     <script>
-      const google_sheets_url = "https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=AIzaSyC2WDeyMkG_NaoKat8qiq-1NRX8xb-Cp3c";
+      const google_sheets_url =
+        "https://sheets.googleapis.com/v4/spreadsheets/13ROGhTaYSxWIT509hgRsn1MGKRIKaRR7D6Pyiyv5O5M/values/Sheet1?key=AIzaSyC2WDeyMkG_NaoKat8qiq-1NRX8xb-Cp3c";
 
       const request = new XMLHttpRequest();
 
-      request.onreadystatechange = function() {
+      request.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
           let response = this.responseText;
           let json = JSON.parse(response);
@@ -134,7 +139,7 @@
             }
           });
         }
-      }
+      };
 
       request.open("GET", google_sheets_url, true);
       request.send();
