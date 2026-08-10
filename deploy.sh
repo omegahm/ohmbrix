@@ -4,6 +4,6 @@
 npm run build
 
 # Copy the build folder to the server
-scp build/index.html ohmbrix.dk:public_html/ønsker.html
-scp -r build/* ohmbrix.dk:public_html/.
-scp index.html ohmbrix.dk:public_html/.
+scp build/index.html ssh.simply.com:public_html/ønsker.html
+scp -r build/* ssh.simply.com:public_html/.
+scp index.html ssh.simply.com:public_html/.
