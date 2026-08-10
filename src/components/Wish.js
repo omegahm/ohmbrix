@@ -59,6 +59,7 @@ export const Wish = ({ title, url, image }) => {
 
         {url && (
           <Button
+            data-url={url}
             onClick={goToLink}
             size="small"
             style={{
