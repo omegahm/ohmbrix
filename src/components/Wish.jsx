@@ -7,10 +7,10 @@ import {
   CardContent,
   CardMedia,
   Grid,
-  Icon,
   Typography,
 } from "@mui/material";
 
+import LinkIcon from "@mui/icons-material/Link";
 import { useTheme } from "@mui/material/styles";
 
 const placeholder =
@@ -68,15 +68,13 @@ export const Wish = ({ title, url, image }) => {
               borderRadius: 0,
             }}
           >
-            <Icon
+            <LinkIcon
               sx={{
                 marginRight: theme.spacing(1),
                 verticalAlign: "text-bottom",
               }}
               fontSize="small"
-            >
-              link
-            </Icon>
+            />
             {urlName}
           </Button>
         )}
