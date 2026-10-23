@@ -13,18 +13,18 @@ import {
 
 import { useTheme } from "@emotion/react";
 
+const placeholder =
+  "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 font-size=%2260%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🎁</text></svg>";
+
 export const Wish = ({ title, url, image }) => {
   const theme = useTheme();
-
-  const placeholder =
-    "https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small";
 
   let urlName = "";
   try {
     if (url) {
-      urlName = new URL(url).hostname.replace(/^www./, "").replace(/\..*$/, "");
+      urlName = new URL(url).hostname.replace(/^www\./, "").replace(/\..*$/, "");
     }
-  } catch (e) {
+  } catch {
     console.error(`Couldn't parse "${url}"`);
   }
 
