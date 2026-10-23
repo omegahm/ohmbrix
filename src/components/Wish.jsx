@@ -22,7 +22,7 @@ export const Wish = ({ title, url, image }) => {
   let urlName = "";
   try {
     if (url) {
-      urlName = new URL(url).hostname.replace(/^www\./, "").replace(/\..*$/, "");
+      urlName = new URL(url).hostname.replace(/^www\./, "");
     }
   } catch {
     console.error(`Couldn't parse "${url}"`);
@@ -32,12 +32,13 @@ export const Wish = ({ title, url, image }) => {
     <>
       <CardMedia
         component="img"
-        height="200"
         image={image || placeholder}
-        title={title}
+        alt={title}
+        loading="lazy"
+        sx={{ height: 200 }}
       />
       <CardContent>
-        <Typography gutterBottom variant="body1" component="h3">
+        <Typography gutterBottom variant="body1" component="h4">
           {title}
         </Typography>
       </CardContent>
@@ -48,7 +49,13 @@ export const Wish = ({ title, url, image }) => {
     <Grid size={{ xs: 12, sm: 6, md: 3, xl: 2 }}>
       <Card variant="outlined" style={{ borderColor: theme.palette.grey[300] }}>
         {url ? (
-          <CardActionArea component="a" href={url}>
+          <CardActionArea
+            component="a"
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            tabIndex={-1}
+          >
             {content}
           </CardActionArea>
         ) : (
@@ -59,6 +66,8 @@ export const Wish = ({ title, url, image }) => {
           <Button
             data-url={url}
             href={url}
+            target="_blank"
+            rel="noopener noreferrer"
             size="small"
             style={{
               padding: 5,

@@ -2,10 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import {
   AppBar,
-  Backdrop,
   Box,
   Button,
-  CircularProgress,
   Container,
   CssBaseline,
   Toolbar,
@@ -48,6 +46,11 @@ let theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: () => ({
+        html: {
+          "@media (prefers-reduced-motion: no-preference)": {
+            scrollBehavior: "smooth",
+          },
+        },
         body: {
           marginBottom: 30,
         },
@@ -101,6 +104,15 @@ theme = createTheme(theme, {
   },
 });
 
+const visuallyHidden = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  overflow: "hidden",
+  clip: "rect(0 0 0 0)",
+  whiteSpace: "nowrap",
+};
+
 const byNextBirthday = (a, b) => {
   if (!a.birthday || !b.birthday) {
     return Boolean(b.birthday) - Boolean(a.birthday);
@@ -112,6 +124,7 @@ export const App = () => {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -146,7 +159,16 @@ export const App = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [attempt]);
+
+  useEffect(() => {
+    if (loading || !window.location.hash) {
+      return;
+    }
+
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    document.getElementById(id)?.scrollIntoView();
+  }, [loading]);
 
   const names = useMemo(() => people.map((person) => person.name), [people]);
   const sortedPeople = useMemo(() => [...people].sort(byNextBirthday), [people]);
@@ -158,14 +180,12 @@ export const App = () => {
         <Toolbar style={{ minHeight: 36 }}>
           <Typography
             variant="h4"
+            component="h1"
             color="inherit"
             noWrap
             sx={{
               fontSize: 14,
-              display: {
-                xs: "none",
-                sm: "flex",
-              },
+              [theme.breakpoints.down("sm")]: visuallyHidden,
             }}
           >
             Vores Ønsker
@@ -176,23 +196,19 @@ export const App = () => {
               flexGrow: 1,
               display: "flex",
               justifyContent: { xs: "space-around", sm: "end" },
+              overflowX: "auto",
             }}
           >
             {names.map((name) => (
               <Button
                 key={name}
-                onClick={() => {
-                  let elem = document.getElementById(`${name}`);
-                  window.scrollTo({
-                    behavior: "smooth",
-                    top: elem.offsetTop - SCROLL_OFFSET,
-                  });
-                }}
+                href={`#${name}`}
                 sx={{
-                  minWidth: { xs: 55, sm: 64 },
+                  minWidth: 0,
+                  px: { xs: 1, sm: 2 },
                   color: "white",
-                  display: "block",
-                  fontSize: { xs: 9, sm: 14 },
+                  whiteSpace: "nowrap",
+                  fontSize: { xs: 13, sm: 14 },
                   fontFamily: "Permanent Marker",
                 }}
               >
@@ -211,14 +227,23 @@ export const App = () => {
             top: 0,
             width: "100vw",
             height: "100vh",
+            pointerEvents: "none",
           }}
         />
         <Container maxWidth={false}>
           {loading && <LoadingContent />}
           {!loading && error && (
-            <Typography variant="h3" component="h1" color="secondary">
-              Kunne ikke hente ønskerne. Prøv igen senere.
-            </Typography>
+            <>
+              <Typography variant="h3" component="h2" color="secondary">
+                Kunne ikke hente ønskerne.
+              </Typography>
+              <Button
+                variant="contained"
+                onClick={() => setAttempt((n) => n + 1)}
+              >
+                Prøv igen
+              </Button>
+            </>
           )}
           {!loading &&
             !error &&
@@ -227,10 +252,6 @@ export const App = () => {
             ))}
         </Container>
       </main>
-
-      <Backdrop open={loading}>
-        <CircularProgress size={100} variant="indeterminate" color="primary" />
-      </Backdrop>
     </ThemeProvider>
   );
 };

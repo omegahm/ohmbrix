@@ -20,12 +20,18 @@ export const Person = ({ name, categories, birthday, details }) => {
 
   return (
     <>
-      <Typography id={name} variant="h2" component="h1" color="secondary">
+      <Typography
+        id={name}
+        variant="h2"
+        component="h2"
+        color="secondary"
+        sx={{ scrollMarginTop: 40 }}
+      >
         {name}
       </Typography>
 
       {showBirthday && (
-        <Typography gutterBottom variant="h4" component="h3" color="secondary">
+        <Typography gutterBottom variant="h4" component="p" color="secondary">
           {dayUntilBirthday === 0
             ? `Fødselsdag i dag (${age} år)`
             : `${dayUntilBirthday} ${days} til fødselsdag (${age} år)`}
@@ -37,7 +43,7 @@ export const Person = ({ name, categories, birthday, details }) => {
           <Grid size={{ xs: 12, sm: 6 }}>
             <Card variant="outlined">
               <CardContent>
-                <Typography variant="h4" component="h5" color="secondary">
+                <Typography variant="h4" component="h4" color="secondary">
                   Noter
                 </Typography>
 

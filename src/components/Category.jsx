@@ -5,13 +5,13 @@ import { Wish } from "./Wish";
 
 export const Category = ({ title, wishes }) => (
   <>
-    <Typography variant="h3" component="h2">
+    <Typography variant="h3" component="h3">
       {title}
     </Typography>
 
     <Grid container spacing={3}>
-      {wishes.map((wish) => (
-        <Wish key={wish.title} {...wish} />
+      {wishes.map((wish, idx) => (
+        <Wish key={idx} {...wish} />
       ))}
     </Grid>
   </>

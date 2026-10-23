@@ -4,11 +4,11 @@ import { Card, CardContent, Grid, Skeleton, Typography } from "@mui/material";
 
 export const LoadingContent = () => (
   <>
-    <Typography variant="h2" component="h1" color="secondary">
+    <Typography variant="h2" component="h2" color="secondary">
       <Skeleton width="60%" />
     </Typography>
 
-    <Typography variant="h3" component="h2">
+    <Typography variant="h3" component="h3">
       <Skeleton width="20%" />
     </Typography>
 
@@ -18,10 +18,10 @@ export const LoadingContent = () => (
         .map((_, idx) => (
           <Grid key={`grid-${idx}`} size={{ xs: 12, sm: 6, md: 3, xl: 2 }}>
             <Card>
-              <Skeleton sx={{ height: 190 }} variant="rectangular" />
+              <Skeleton sx={{ height: 200 }} variant="rectangular" />
 
               <CardContent>
-                <Typography gutterBottom variant="body1" component="h3">
+                <Typography gutterBottom variant="body1" component="h4">
                   <Skeleton width="30%" />
                 </Typography>
               </CardContent>
