@@ -3,7 +3,14 @@ const google_sheets_url = `https://sheets.googleapis.com/v4/spreadsheets/13ROGhT
 
 export const loadData = async () => {
   const response = await fetch(google_sheets_url);
+  if (!response.ok) {
+    throw new Error(`Google Sheets request failed: ${response.status}`);
+  }
+
   const data = await response.json();
+  if (!Array.isArray(data.values)) {
+    throw new Error("Google Sheets response has no values");
+  }
 
   let result = [];
   let currentPerson = {};

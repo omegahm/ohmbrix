@@ -17,6 +17,7 @@ import { LoadingContent } from "./components/LoadingContent";
 import { Person } from "./components/Person";
 
 import { calcDaysUntil } from "./utils/days_until";
+import { celebrate } from "./utils/confetti";
 import { loadData } from "./utils/api";
 
 const SCROLL_OFFSET = 40;
@@ -104,12 +105,31 @@ export const App = () => {
   const [content, setContent] = useState([]);
   const [names, setNames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchData = async () => {
       setLoading(true);
+      setError(false);
 
-      const data = await loadData();
+      let data;
+      try {
+        data = await loadData();
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) {
+          setError(true);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (cancelled) {
+        return;
+      }
+
       setNames(data.map((person) => person.name));
 
       setContent(
@@ -127,10 +147,15 @@ export const App = () => {
       );
 
       setLoading(false);
+      celebrate(data);
     };
 
     fetchData();
-  }, [setContent, setLoading]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -195,7 +220,13 @@ export const App = () => {
           }}
         />
         <Container maxWidth={false}>
-          {loading ? <LoadingContent /> : content}
+          {loading && <LoadingContent />}
+          {!loading && error && (
+            <Typography variant="h3" component="h1" color="secondary">
+              Kunne ikke hente ønskerne. Prøv igen senere.
+            </Typography>
+          )}
+          {!loading && !error && content}
         </Container>
       </main>
 

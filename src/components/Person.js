@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import {
   Card,
@@ -10,46 +10,13 @@ import {
 } from "@mui/material";
 import { Category } from "./Category";
 
-import { calcAge, calcDaysUntil } from "../utils/days_until";
-
-import confetti from "canvas-confetti";
+import { calcAge, calcDaysUntil, isChristmas } from "../utils/days_until";
 
 export const Person = ({ name, categories, birthday, details }) => {
-  if (birthday.includes("12-24")) {
-    birthday = null;
-  }
-
-  const dayUntilBirthday = calcDaysUntil(birthday);
-  const age = calcAge(birthday);
+  const showBirthday = Boolean(birthday) && !isChristmas(birthday);
+  const dayUntilBirthday = showBirthday ? calcDaysUntil(birthday) : null;
+  const age = showBirthday ? calcAge(birthday) : null;
   const days = dayUntilBirthday === 1 ? "dag" : "dage";
-
-  let flagChars = birthday ? ["🇩🇰", "🎂", "🎉"] : ["🎄", "🎅🏻", "❄️", "⛄️"];
-  const flags = flagChars.map((char) => {
-    return confetti.shapeFromText({
-      text: char,
-      scalar: 3,
-    });
-  });
-
-  const flagConfetti = confetti.create(document.querySelector("#confetti"), {
-    resize: true,
-    useWorker: false,
-    disableForReducedMotion: true,
-  });
-
-  useEffect(() => {
-    if (dayUntilBirthday < 30) {
-      flagConfetti({
-        particleCount: 200,
-        angle: -90,
-        spread: 135,
-        ticks: 400,
-        origin: { x: 0.5, y: -0.3 },
-        shapes: flags,
-        scalar: 3,
-      });
-    }
-  }, [dayUntilBirthday, flags, flagConfetti]);
 
   return (
     <>
@@ -57,9 +24,11 @@ export const Person = ({ name, categories, birthday, details }) => {
         {name}
       </Typography>
 
-      {birthday && (
+      {showBirthday && (
         <Typography gutterBottom variant="h4" component="h3" color="secondary">
-          {`${dayUntilBirthday} ${days} til fødselsdag (${age} år)`}
+          {dayUntilBirthday === 0
+            ? `Fødselsdag i dag (${age} år)`
+            : `${dayUntilBirthday} ${days} til fødselsdag (${age} år)`}
         </Typography>
       )}
 
