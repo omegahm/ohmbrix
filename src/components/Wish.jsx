@@ -19,18 +19,6 @@ export const Wish = ({ title, url, image }) => {
   const placeholder =
     "https://pbs.twimg.com/media/CQyFt-xWEAA571_?format=png&name=small";
 
-  const goToLink = (event) => {
-    if (!url) {
-      return;
-    }
-
-    if (event.ctrlKey || event.metaKey) {
-      window.open(url, "_blank").focus();
-    } else {
-      window.location.assign(url);
-    }
-  };
-
   let urlName = "";
   try {
     if (url) {
@@ -40,27 +28,37 @@ export const Wish = ({ title, url, image }) => {
     console.error(`Couldn't parse "${url}"`);
   }
 
+  const content = (
+    <>
+      <CardMedia
+        component="img"
+        height="200"
+        image={image || placeholder}
+        title={title}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="body1" component="h3">
+          {title}
+        </Typography>
+      </CardContent>
+    </>
+  );
+
   return (
     <Grid item xs={12} sm={6} md={3} xl={2}>
       <Card variant="outlined" style={{ borderColor: theme.palette.grey[300] }}>
-        <CardActionArea onClick={goToLink}>
-          <CardMedia
-            component="img"
-            height="200"
-            image={image || placeholder}
-            title={title}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="body1" component="h3">
-              {title}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
+        {url ? (
+          <CardActionArea component="a" href={url}>
+            {content}
+          </CardActionArea>
+        ) : (
+          content
+        )}
 
         {url && (
           <Button
             data-url={url}
-            onClick={goToLink}
+            href={url}
             size="small"
             style={{
               padding: 5,
