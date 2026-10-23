@@ -34,7 +34,7 @@ export const Person = ({ name, categories, birthday, details }) => {
 
       {details && details.length > 0 && (
         <Grid container>
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Card variant="outlined">
               <CardContent>
                 <Typography variant="h4" component="h5" color="secondary">
@@ -43,7 +43,7 @@ export const Person = ({ name, categories, birthday, details }) => {
 
                 <List>
                   {details.map((detail) => (
-                    <ListItem key={detail} variant="body1" disablePadding>
+                    <ListItem key={detail} disablePadding>
                       {detail}
                     </ListItem>
                   ))}
