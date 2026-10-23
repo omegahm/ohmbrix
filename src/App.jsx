@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   AppBar,
@@ -101,9 +101,15 @@ theme = createTheme(theme, {
   },
 });
 
+const byNextBirthday = (a, b) => {
+  if (!a.birthday || !b.birthday) {
+    return Boolean(b.birthday) - Boolean(a.birthday);
+  }
+  return calcDaysUntil(a.birthday) - calcDaysUntil(b.birthday);
+};
+
 export const App = () => {
-  const [content, setContent] = useState([]);
-  const [names, setNames] = useState([]);
+  const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -130,22 +136,7 @@ export const App = () => {
         return;
       }
 
-      setNames(data.map((person) => person.name));
-
-      setContent(
-        data
-          .sort((a, b) => {
-            if (a.birthday === undefined) {
-              return 1;
-            }
-            if (b.birthday === undefined) {
-              return -1;
-            }
-            return calcDaysUntil(a.birthday) - calcDaysUntil(b.birthday);
-          })
-          .map((person) => <Person key={person.name} {...person} />)
-      );
-
+      setPeople(data);
       setLoading(false);
       celebrate(data);
     };
@@ -156,6 +147,9 @@ export const App = () => {
       cancelled = true;
     };
   }, []);
+
+  const names = useMemo(() => people.map((person) => person.name), [people]);
+  const sortedPeople = useMemo(() => [...people].sort(byNextBirthday), [people]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -226,7 +220,11 @@ export const App = () => {
               Kunne ikke hente ønskerne. Prøv igen senere.
             </Typography>
           )}
-          {!loading && !error && content}
+          {!loading &&
+            !error &&
+            sortedPeople.map((person) => (
+              <Person key={person.name} {...person} />
+            ))}
         </Container>
       </main>
 
