@@ -18,29 +18,30 @@ import { calcDaysUntil } from "./utils/days_until";
 import { celebrate } from "./utils/confetti";
 import { loadData } from "./utils/api";
 
-const SCROLL_OFFSET = 40;
+const SCROLL_OFFSET = 48;
+const MARKER = ["Permanent Marker", "sans-serif"].join(",");
 
 let theme = createTheme({
   palette: {
     primary: {
-      main: "#3f51b5",
+      main: "#3d2b6b",
     },
-    secondary: {
-      main: "#f50057",
+    background: {
+      default: "#e6e6ff",
+      paper: "#ffffff",
+    },
+    text: {
+      primary: "#1f1a2e",
+      secondary: "#55506a",
     },
   },
+  shape: {
+    borderRadius: 12,
+  },
   typography: {
-    h1: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
-    },
+    fontSize: 16,
     h2: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
-    },
-    h3: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
-    },
-    h4: {
-      fontFamily: ["Permanent Marker", "sans-serif"].join(","),
+      fontFamily: MARKER,
     },
   },
   components: {
@@ -57,18 +58,14 @@ let theme = createTheme({
       }),
     },
     MuiCard: {
+      defaultProps: {
+        elevation: 0,
+      },
       styleOverrides: {
         root: {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-        },
-      },
-    },
-    MuiCardActionArea: {
-      styleOverrides: {
-        root: {
-          height: "100%",
         },
       },
     },
@@ -78,18 +75,20 @@ let theme = createTheme({
 theme = createTheme(theme, {
   typography: {
     h2: {
-      fontSize: "3.75rem",
-      marginTop: "1.5rem",
+      fontSize: "3rem",
+      lineHeight: 1.2,
+      color: theme.palette.primary.main,
       [theme.breakpoints.down("md")]: {
-        fontSize: "3rem",
+        fontSize: "2.25rem",
       },
     },
     h3: {
-      marginTop: "1.5rem",
-      marginBottom: "1rem",
-    },
-    h4: {
-      fontSize: "1.25rem",
+      fontSize: "0.95rem",
+      fontWeight: 700,
+      letterSpacing: "0.1em",
+      textTransform: "uppercase",
+      color: theme.palette.primary.main,
+      marginBottom: theme.spacing(1.5),
     },
   },
   components: {
@@ -97,7 +96,6 @@ theme = createTheme(theme, {
       styleOverrides: {
         root: {
           objectFit: "contain",
-          padding: theme.spacing(2),
         },
       },
     },
@@ -125,6 +123,7 @@ export const App = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  const [activeName, setActiveName] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -170,21 +169,61 @@ export const App = () => {
     document.getElementById(id)?.scrollIntoView();
   }, [loading]);
 
-  const names = useMemo(() => people.map((person) => person.name), [people]);
-  const sortedPeople = useMemo(() => [...people].sort(byNextBirthday), [people]);
+  const sortedPeople = useMemo(
+    () => [...people].sort(byNextBirthday),
+    [people],
+  );
+  const names = useMemo(
+    () => sortedPeople.map((person) => person.name),
+    [sortedPeople],
+  );
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const updateActiveName = () => {
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+
+      let current = sortedPeople[0]?.name ?? null;
+      sortedPeople.forEach(({ name }) => {
+        const top = document.getElementById(name)?.getBoundingClientRect().top;
+        if (atBottom || top <= SCROLL_OFFSET * 2) {
+          current = name;
+        }
+      });
+      setActiveName(current);
+    };
+
+    updateActiveName();
+    window.addEventListener("scroll", updateActiveName, { passive: true });
+    window.addEventListener("resize", updateActiveName);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveName);
+      window.removeEventListener("resize", updateActiveName);
+    };
+  }, [loading, sortedPeople]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="fixed" color="primary">
-        <Toolbar style={{ minHeight: 36 }}>
+      <AppBar position="fixed" color="primary" elevation={0}>
+        <Toolbar
+          variant="dense"
+          sx={{ minHeight: SCROLL_OFFSET, px: { xs: 0.5, sm: 2 } }}
+        >
           <Typography
             variant="h4"
             component="h1"
             color="inherit"
             noWrap
             sx={{
-              fontSize: 14,
+              fontFamily: MARKER,
+              fontSize: 18,
               [theme.breakpoints.down("sm")]: visuallyHidden,
             }}
           >
@@ -195,24 +234,47 @@ export const App = () => {
             sx={{
               flexGrow: 1,
               display: "flex",
-              justifyContent: { xs: "space-around", sm: "end" },
+              justifyContent: { xs: "flex-start", sm: "end" },
               overflowX: "auto",
+              "& > :first-of-type": { ml: { xs: "auto", sm: 0 } },
+              "& > :last-of-type": { mr: { xs: "auto", sm: 0 } },
             }}
           >
             {names.map((name) => (
               <Button
                 key={name}
                 href={`#${name}`}
+                aria-current={name === activeName ? "location" : undefined}
                 sx={{
                   minWidth: 0,
-                  px: { xs: 1, sm: 2 },
+                  minHeight: 40,
+                  flexShrink: 0,
+                  px: { xs: 0.75, sm: 2 },
+                  mx: { xs: 0, sm: 0.25 },
+                  borderRadius: 999,
                   color: "white",
                   whiteSpace: "nowrap",
-                  fontSize: { xs: 13, sm: 14 },
-                  fontFamily: "Permanent Marker",
+                  textTransform: "none",
+                  fontSize: { xs: "clamp(12px, 3.6vw, 14px)", sm: 17 },
+                  fontFamily: MARKER,
+                  transition: "background-color 150ms, color 150ms",
+                  "&:hover": { bgcolor: "rgba(255, 255, 255, 0.15)" },
+                  "&[aria-current]": {
+                    bgcolor: "white",
+                    color: "primary.main",
+                  },
                 }}
               >
-                {name}
+                {name.split(" ")[0]}
+                <Box
+                  component="span"
+                  sx={{
+                    display: { xs: "none", sm: "inline" },
+                    whiteSpace: "pre",
+                  }}
+                >
+                  {name.slice(name.split(" ")[0].length)}
+                </Box>
               </Button>
             ))}
           </Box>
@@ -230,15 +292,16 @@ export const App = () => {
             pointerEvents: "none",
           }}
         />
-        <Container maxWidth={false}>
+        <Container maxWidth="xl">
           {loading && <LoadingContent />}
           {!loading && error && (
             <>
-              <Typography variant="h3" component="h2" color="secondary">
+              <Typography variant="h5" component="h2" sx={{ mt: 4, mb: 2 }}>
                 Kunne ikke hente ønskerne.
               </Typography>
               <Button
                 variant="contained"
+                size="large"
                 onClick={() => setAttempt((n) => n + 1)}
               >
                 Prøv igen

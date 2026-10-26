@@ -1,24 +1,29 @@
 import React from "react";
 
 import {
+  Box,
   Button,
   Card,
   CardActionArea,
-  CardContent,
   CardMedia,
   Grid,
   Typography,
 } from "@mui/material";
 
 import LinkIcon from "@mui/icons-material/Link";
-import { useTheme } from "@mui/material/styles";
 
 const placeholder =
   "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 font-size=%2260%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🎁</text></svg>";
 
-export const Wish = ({ title, url, image }) => {
-  const theme = useTheme();
+const layout = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "stretch",
+  justifyContent: "flex-start",
+  height: "100%",
+};
 
+export const Wish = ({ title, url, image }) => {
   let urlName = "";
   try {
     if (url) {
@@ -33,21 +38,34 @@ export const Wish = ({ title, url, image }) => {
       <CardMedia
         component="img"
         image={image || placeholder}
-        alt={title}
+        alt=""
         loading="lazy"
-        sx={{ height: 200 }}
+        sx={{
+          width: "100%",
+          height: { xs: 240, sm: 180 },
+          flexShrink: 0,
+          p: 2,
+        }}
       />
-      <CardContent>
-        <Typography gutterBottom variant="body1" component="h4">
+      <Box
+        sx={{
+          p: 2,
+          pt: 0,
+          flexGrow: 1,
+          minWidth: 0,
+          overflowWrap: "anywhere",
+        }}
+      >
+        <Typography variant="body1" component="h4">
           {title}
         </Typography>
-      </CardContent>
+      </Box>
     </>
   );
 
   return (
-    <Grid size={{ xs: 12, sm: 6, md: 3, xl: 2 }}>
-      <Card variant="outlined" style={{ borderColor: theme.palette.grey[300] }}>
+    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+      <Card>
         {url ? (
           <CardActionArea
             component="a"
@@ -55,35 +73,29 @@ export const Wish = ({ title, url, image }) => {
             target="_blank"
             rel="noopener noreferrer"
             tabIndex={-1}
+            sx={layout}
           >
             {content}
           </CardActionArea>
         ) : (
-          content
+          <Box sx={layout}>{content}</Box>
         )}
 
         {url && (
           <Button
-            data-url={url}
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            size="small"
-            style={{
-              padding: 5,
-              borderTopWidth: "1px",
-              borderTopStyle: "solid",
-              borderTopColor: theme.palette.grey[300],
+            startIcon={<LinkIcon />}
+            sx={{
+              minHeight: 48,
+              borderTop: 1,
+              borderColor: "divider",
               borderRadius: 0,
+              textTransform: "none",
+              fontSize: "1rem",
             }}
           >
-            <LinkIcon
-              sx={{
-                marginRight: theme.spacing(1),
-                verticalAlign: "text-bottom",
-              }}
-              fontSize="small"
-            />
             {urlName}
           </Button>
         )}
